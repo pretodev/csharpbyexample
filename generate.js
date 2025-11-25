@@ -145,6 +145,7 @@ function generate() {
         if (fs.existsSync(csFile)) {
             const csContent = readFile(csFile);
             const parsedCs = parseFile(csContent, '//');
+            const csCopyBase64 = Buffer.from(csContent, 'utf8').toString('base64');
 
             let parsedSh = { segments: [] };
             if (fs.existsSync(shFile)) {
@@ -152,7 +153,7 @@ function generate() {
                 parsedSh = parseFile(shContent, '#');
             }
 
-            const html = renderTemplate(example, parsedCs, parsedSh, examples);
+            const html = renderTemplate(example, parsedCs, parsedSh, examples, csCopyBase64);
             writeFile(path.join(SITE_DIR, `${example}.html`), html);
             links.push({ name: example, url: `${example}.html` });
         }
@@ -165,7 +166,7 @@ function generate() {
     writeFile(path.join(SITE_DIR, 'index.html'), indexHtml);
 }
 
-function renderTemplate(title, csData, shData, allExamples) {
+function renderTemplate(title, csData, shData, allExamples, csCopyBase64) {
     const currentIndex = allExamples.indexOf(title);
     const prevExample = currentIndex > 0 ? allExamples[currentIndex - 1] : null;
     const nextExample = currentIndex < allExamples.length - 1 ? allExamples[currentIndex + 1] : null;
@@ -173,6 +174,7 @@ function renderTemplate(title, csData, shData, allExamples) {
     // Filter out empty segments
     const csSegments = csData.segments.filter(seg => seg.code.trim() || seg.docs.trim());
     const shSegments = shData.segments.filter(seg => seg.code.trim() || seg.docs.trim());
+    const encodedCopySource = escapeHtml(csCopyBase64 || '');
 
     const template = `<!DOCTYPE html>
 <html lang="en">
@@ -192,6 +194,10 @@ function renderTemplate(title, csData, shData, allExamples) {
             <p>${seg.docs}</p>
           </td>
           <td class="code${index === 0 ? ' leading' : ''}">
+            ${index === 0 ? `<div class="code-actions">
+              <button type="button" class="copy-button" data-copy-code="${encodedCopySource}">Copiar código</button>
+              <span class="copy-feedback" role="status" aria-live="polite"></span>
+            </div>` : ''}
             <pre><code class="language-csharp">${escapeHtml(seg.code)}</code></pre>
           </td>
         </tr>`).join('\n        ')}
@@ -228,7 +234,102 @@ function renderTemplate(title, csData, shData, allExamples) {
         if (e.key === "ArrowRight") {
           ${nextExample ? `window.location.href = '${nextExample}.html';` : ''}
         }
-      }
+      };
+
+      (function () {
+        const buttons = document.querySelectorAll('[data-copy-code]');
+        if (!buttons.length) return;
+
+        const textDecoder = typeof TextDecoder !== 'undefined' ? new TextDecoder() : null;
+
+        const decodeBase64 = (source) => {
+          if (!source) return '';
+          try {
+            const binary = atob(source);
+            if (textDecoder) {
+              const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+              return textDecoder.decode(bytes);
+            }
+            let percentEncoded = '';
+            for (let i = 0; i < binary.length; i += 1) {
+              const hex = binary.charCodeAt(i).toString(16);
+              percentEncoded += '%' + (hex.length === 1 ? '0' + hex : hex);
+            }
+            return decodeURIComponent(percentEncoded);
+          } catch (error) {
+            console.error('Não foi possível decodificar o código do exemplo.', error);
+            return '';
+          }
+        };
+
+        const copyWithClipboardApi = async (text) => {
+          if (!navigator.clipboard || !navigator.clipboard.writeText) return false;
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch (error) {
+            console.warn('Clipboard API indisponível.', error);
+            return false;
+          }
+        };
+
+        const copyWithFallback = (text) => {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'absolute';
+          textarea.style.left = '-9999px';
+          textarea.style.top = '0';
+          document.body.appendChild(textarea);
+          const selection = document.getSelection();
+          const storedRange = selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+          textarea.select();
+          let success = false;
+          try {
+            success = document.execCommand('copy');
+          } catch (error) {
+            console.error('document.execCommand copy falhou.', error);
+          }
+          document.body.removeChild(textarea);
+          if (storedRange && selection) {
+            selection.removeAllRanges();
+            selection.addRange(storedRange);
+          }
+          return success;
+        };
+
+        const setFeedback = (element, message, state) => {
+          if (!element) return;
+          element.textContent = message;
+          if (state) {
+            element.dataset.state = state;
+          } else {
+            delete element.dataset.state;
+          }
+          if (element._copyTimeout) {
+            clearTimeout(element._copyTimeout);
+          }
+          element._copyTimeout = window.setTimeout(() => {
+            element.textContent = '';
+            delete element.dataset.state;
+            delete element._copyTimeout;
+          }, 2000);
+        };
+
+        buttons.forEach((button) => {
+          button.addEventListener('click', async () => {
+            const sibling = button.nextElementSibling;
+            const feedback = sibling && sibling.classList.contains('copy-feedback') ? sibling : null;
+            const code = decodeBase64(button.dataset.copyCode || '');
+            if (!code) {
+              setFeedback(feedback, 'Código indisponível', 'error');
+              return;
+            }
+            const copied = (await copyWithClipboardApi(code)) || copyWithFallback(code);
+            setFeedback(feedback, copied ? 'Copiado!' : 'Erro ao copiar', copied ? 'success' : 'error');
+          });
+        });
+      })();
     </script>
   </body>
 </html>`;

@@ -158,6 +158,55 @@ td.code {
   margin: 0;
 }
 
+.code-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem 0;
+}
+
+.copy-button {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 999px;
+  padding: 0.25rem 0.95rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.copy-button:hover,
+.copy-button:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.copy-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(137, 180, 250, 0.25);
+}
+
+.copy-feedback {
+  min-height: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.copy-feedback[data-state="success"] {
+  color: var(--code-green);
+}
+
+.copy-feedback[data-state="error"] {
+  color: var(--code-red);
+}
+
 /* First code cell gets top border radius */
 tr:first-child td.code {
   border-radius: 8px 8px 0 0;

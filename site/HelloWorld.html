@@ -16,6 +16,10 @@
             <p></p>
           </td>
           <td class="code leading">
+            <div class="code-actions">
+              <button type="button" class="copy-button" data-copy-code="dXNpbmcgU3lzdGVtOwoKLy8gQSBzaW1wbGUgcHJvZ3JhbSB0aGF0IHByaW50cyAiSGVsbG8gV29ybGQiIHRvIHRoZSBjb25zb2xlLgpjbGFzcyBQcm9ncmFtCnsKICAgIHN0YXRpYyB2b2lkIE1haW4oKQogICAgewogICAgICAgIC8vIENvbnNvbGUuV3JpdGVMaW5lIHByaW50cyBhIGxpbmUgdG8gc3RhbmRhcmQgb3V0cHV0CiAgICAgICAgQ29uc29sZS5Xcml0ZUxpbmUoIkhlbGxvIFdvcmxkIik7CiAgICB9Cn0=">Copiar código</button>
+              <span class="copy-feedback" role="status" aria-live="polite"></span>
+            </div>
             <pre><code class="language-csharp">using System;</code></pre>
           </td>
         </tr>
@@ -24,6 +28,7 @@
             <p>A simple program that prints "Hello World" to the console.</p>
           </td>
           <td class="code">
+            
             <pre><code class="language-csharp">class Program
 {
     static void Main()
@@ -35,6 +40,7 @@
             <p>Console.WriteLine prints a line to standard output</p>
           </td>
           <td class="code">
+            
             <pre><code class="language-csharp">        Console.WriteLine(&quot;Hello World&quot;);
     }
 }</code></pre>
@@ -104,7 +110,102 @@ Hello World</code></pre>
         if (e.key === "ArrowRight") {
           window.location.href = 'Values.html';
         }
-      }
+      };
+
+      (function () {
+        const buttons = document.querySelectorAll('[data-copy-code]');
+        if (!buttons.length) return;
+
+        const textDecoder = typeof TextDecoder !== 'undefined' ? new TextDecoder() : null;
+
+        const decodeBase64 = (source) => {
+          if (!source) return '';
+          try {
+            const binary = atob(source);
+            if (textDecoder) {
+              const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+              return textDecoder.decode(bytes);
+            }
+            let percentEncoded = '';
+            for (let i = 0; i < binary.length; i += 1) {
+              const hex = binary.charCodeAt(i).toString(16);
+              percentEncoded += '%' + (hex.length === 1 ? '0' + hex : hex);
+            }
+            return decodeURIComponent(percentEncoded);
+          } catch (error) {
+            console.error('Não foi possível decodificar o código do exemplo.', error);
+            return '';
+          }
+        };
+
+        const copyWithClipboardApi = async (text) => {
+          if (!navigator.clipboard || !navigator.clipboard.writeText) return false;
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch (error) {
+            console.warn('Clipboard API indisponível.', error);
+            return false;
+          }
+        };
+
+        const copyWithFallback = (text) => {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'absolute';
+          textarea.style.left = '-9999px';
+          textarea.style.top = '0';
+          document.body.appendChild(textarea);
+          const selection = document.getSelection();
+          const storedRange = selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+          textarea.select();
+          let success = false;
+          try {
+            success = document.execCommand('copy');
+          } catch (error) {
+            console.error('document.execCommand copy falhou.', error);
+          }
+          document.body.removeChild(textarea);
+          if (storedRange && selection) {
+            selection.removeAllRanges();
+            selection.addRange(storedRange);
+          }
+          return success;
+        };
+
+        const setFeedback = (element, message, state) => {
+          if (!element) return;
+          element.textContent = message;
+          if (state) {
+            element.dataset.state = state;
+          } else {
+            delete element.dataset.state;
+          }
+          if (element._copyTimeout) {
+            clearTimeout(element._copyTimeout);
+          }
+          element._copyTimeout = window.setTimeout(() => {
+            element.textContent = '';
+            delete element.dataset.state;
+            delete element._copyTimeout;
+          }, 2000);
+        };
+
+        buttons.forEach((button) => {
+          button.addEventListener('click', async () => {
+            const sibling = button.nextElementSibling;
+            const feedback = sibling && sibling.classList.contains('copy-feedback') ? sibling : null;
+            const code = decodeBase64(button.dataset.copyCode || '');
+            if (!code) {
+              setFeedback(feedback, 'Código indisponível', 'error');
+              return;
+            }
+            const copied = (await copyWithClipboardApi(code)) || copyWithFallback(code);
+            setFeedback(feedback, copied ? 'Copiado!' : 'Erro ao copiar', copied ? 'success' : 'error');
+          });
+        });
+      })();
     </script>
   </body>
 </html>
