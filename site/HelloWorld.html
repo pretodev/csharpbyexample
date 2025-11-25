@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C# by Example: HelloWorld</title>
+    <link rel="stylesheet" href="site.css">
+  </head>
+  <body>
+    <div class="example" id="helloworld">
+      <h2><a href="./">C# by Example</a>: HelloWorld</h2>
+      
+      <table>
+        <tr class="spaced">
+          <td class="docs">
+            <p></p>
+          </td>
+          <td class="code leading">
+            <pre><code class="language-csharp">using System;</code></pre>
+          </td>
+        </tr>
+        <tr class="">
+          <td class="docs">
+            <p>A simple program that prints "Hello World" to the console.</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">class Program
+{
+    static void Main()
+    {</code></pre>
+          </td>
+        </tr>
+        <tr class="">
+          <td class="docs">
+            <p>Console.WriteLine prints a line to standard output</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">        Console.WriteLine(&quot;Hello World&quot;);
+    }
+}</code></pre>
+          </td>
+        </tr>
+      </table>
+      
+      <table>
+        <tr class="spaced">
+          <td class="docs">
+            <p></p>
+          </td>
+          <td class="code leading">
+            <pre><code class="language-bash">$ dotnet run
+Hello World</code></pre>
+          </td>
+        </tr>
+        <tr class="spaced">
+          <td class="docs">
+            <p>Sometimes we'll want to build our programs into binaries. We can do this using `dotnet build`.</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-bash">$ dotnet build
+Microsoft (R) Build Engine version [version]
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Building...
+  HelloWorld -&gt; bin/Debug/net[version]/HelloWorld.dll</code></pre>
+          </td>
+        </tr>
+        <tr class="spaced">
+          <td class="docs">
+            <p>We can then execute the built binary directly.</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-bash">$ dotnet bin/Debug/net[version]/HelloWorld.dll
+Hello World</code></pre>
+          </td>
+        </tr>
+        <tr class="">
+          <td class="docs">
+            <p>Now that we can run and build basic C# programs, let's learn more about the language.</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-bash"></code></pre>
+          </td>
+        </tr>
+      </table>
+      
+      <p class="next">
+        Next example: <a href="Values.html">Values</a>.
+      </p>
+      
+      <p class="footer">
+        <a href="https://github.com/yourusername/csharp_by_examples">source</a> | <a href="https://github.com/yourusername/csharp_by_examples#license">license</a>
+      </p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script>
+      window.onkeydown = (e) => {
+        if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return;
+        if (e.key === "ArrowLeft") {
+          
+        }
+        if (e.key === "ArrowRight") {
+          window.location.href = 'Values.html';
+        }
+      }
+    </script>
+  </body>
+</html>

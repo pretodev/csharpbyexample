@@ -1,0 +1,25 @@
+{
+  "name": "csharp_by_examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "node generate.js",
+    "watch:gen": "nodemon --watch examples --watch generate.js --watch templates -e js,cs,sh,html --exec \"node generate.js\"",
+    "serve": "browser-sync start --server \"site\" --files \"site\"",
+    "dev": "concurrently \"npm run watch:gen\" \"npm run serve\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.11"
+  }
+}

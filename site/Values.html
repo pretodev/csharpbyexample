@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C# by Example: Values</title>
+    <link rel="stylesheet" href="site.css">
+  </head>
+  <body>
+    <div class="example" id="values">
+      <h2><a href="./">C# by Example</a>: Values</h2>
+      
+      <table>
+        <tr class="spaced">
+          <td class="docs">
+            <p></p>
+          </td>
+          <td class="code leading">
+            <pre><code class="language-csharp">using System;
+using Internal;
+
+class Program
+{
+  static void Main()
+  {</code></pre>
+          </td>
+        </tr>
+        <tr class="spaced">
+          <td class="docs">
+            <p>Strings can be concatenated with +</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">    Console.WriteLine(&quot;hello&quot; + &quot; world&quot;);</code></pre>
+          </td>
+        </tr>
+        <tr class="spaced">
+          <td class="docs">
+            <p>Integer types</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">    int wholeNumber = 42;
+    long bigNumber = 1000000L;
+    short smallNumber = 100;
+    byte tinyNumber = 255;
+    Console.WriteLine($&quot;Integer: {wholeNumber}&quot;);
+    Console.WriteLine($&quot;Long: {bigNumber}&quot;);
+    Console.WriteLine($&quot;Short: {smallNumber}&quot;);
+    Console.WriteLine($&quot;Byte: {tinyNumber}&quot;);</code></pre>
+          </td>
+        </tr>
+        <tr class="spaced">
+          <td class="docs">
+            <p>Floating point types</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">    float singlePrecision = 3.14f;
+    double doublePrecision = 2.71828;
+    decimal preciseDecimal = 123.456m;
+    Console.WriteLine($&quot;Float: {singlePrecision}&quot;);
+    Console.WriteLine($&quot;Double: {doublePrecision}&quot;);
+    Console.WriteLine($&quot;Decimal: {preciseDecimal}&quot;);</code></pre>
+          </td>
+        </tr>
+        <tr class="spaced">
+          <td class="docs">
+            <p>Arithmetic operations</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">    Console.WriteLine($&quot;1+1 = {1 + 1}&quot;);
+    Console.WriteLine($&quot;7.0/3.0 = {7.0 / 3.0}&quot;);
+    Console.WriteLine($&quot;10 % 3 = {10 % 3}&quot;); // Modulo</code></pre>
+          </td>
+        </tr>
+        <tr class="spaced">
+          <td class="docs">
+            <p>Character type</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">    char letter = &#039;A&#039;;
+    char digit = &#039;7&#039;;
+    Console.WriteLine($&quot;Character: {letter}&quot;);
+    Console.WriteLine($&quot;Digit: {digit}&quot;);</code></pre>
+          </td>
+        </tr>
+        <tr class="spaced">
+          <td class="docs">
+            <p>Boolean values and operators</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">    bool isTrue = true;
+    bool isFalse = false;
+    Console.WriteLine($&quot;True AND False: {isTrue &amp;&amp; isFalse}&quot;);
+    Console.WriteLine($&quot;True OR False: {isTrue || isFalse}&quot;);
+    Console.WriteLine($&quot;NOT True: {!isTrue}&quot;);</code></pre>
+          </td>
+        </tr>
+        <tr class="">
+          <td class="docs">
+            <p>Comparison operators return booleans</p>
+          </td>
+          <td class="code">
+            <pre><code class="language-csharp">    Console.WriteLine($&quot;5 &gt; 3: {5 &gt; 3}&quot;);
+    Console.WriteLine($&quot;5 == 3: {5 == 3}&quot;);
+    Console.WriteLine($&quot;5 != 3: {5 != 3}&quot;);
+  }
+}</code></pre>
+          </td>
+        </tr>
+      </table>
+      
+      <table>
+        <tr class="">
+          <td class="docs">
+            <p></p>
+          </td>
+          <td class="code leading">
+            <pre><code class="language-bash">$ dotnet run
+hello world
+Integer: 42
+Long: 1000000
+Short: 100
+Byte: 255
+Float: 3.14
+Double: 2.71828
+Decimal: 123.456
+1+1 = 2
+7.0/3.0 = 2.3333333333333335
+10 % 3 = 1
+Character: A
+Digit: 7
+True AND False: False
+True OR False: True
+NOT True: False
+5 &gt; 3: True
+5 == 3: False
+5 != 3: True</code></pre>
+          </td>
+        </tr>
+      </table>
+      
+      <p class="next">
+        
+      </p>
+      
+      <p class="footer">
+        <a href="https://github.com/yourusername/csharp_by_examples">source</a> | <a href="https://github.com/yourusername/csharp_by_examples#license">license</a>
+      </p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script>
+      window.onkeydown = (e) => {
+        if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return;
+        if (e.key === "ArrowLeft") {
+          window.location.href = 'HelloWorld.html';
+        }
+        if (e.key === "ArrowRight") {
+          
+        }
+      }
+    </script>
+  </body>
+</html>
